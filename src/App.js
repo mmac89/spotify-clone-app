@@ -14,7 +14,7 @@ function App() {
 
   const [token, setToken] = useState(null);
 
-  const [ {user}, dispatch] = useDataLayerValue();
+  const [ {user} , dispatch] = useDataLayerValue();
 
   //run code based on a given condition
   useEffect(() => {
@@ -27,20 +27,20 @@ function App() {
 
       spotify.setAccessToken(_token);
 
-      spotify.getMe().then((user)=>{
+      spotify.getMe().then((user) => {
+
+       
         dispatch({
-          type: 'SET_USER',
-          user: user,
+          type: "SET_USER",
+          user: user
         });
       });
     }
-
 
     console.log("I HAVE A TOKEN ", token);
   }, []);
 
   console.log('is there a user', user);
-
   return (
     <div className="app">
       {

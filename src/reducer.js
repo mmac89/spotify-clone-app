@@ -5,19 +5,23 @@ export const initialState = {
     item: null,
 };
 
-const reducer = (state, action) => {
-    console.log(action);
 
+const reducer = (state, action) => {
+    console.log( "this is the action" + action);
+    
     //Action -> type, [Payload]
-    switch(action.type){
-        case 'SET_USER':
-            return{
+
+    switch(action.type) {
+        case "SET_USER":
+            return {
                 ...state, 
                 user: action.user
             }
             default:
                 return state;
     }
+
+    
 }
 
 export default reducer;
