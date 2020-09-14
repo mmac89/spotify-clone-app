@@ -3,7 +3,12 @@
     background: linear-gradient(rgb(91, 87, 115), black);
     height: 100vh;
     color: white;
+    overflow-y: overlay;
     padding: 30px;
+}
+
+.body::-webkit-scrollbar{
+    display: none;
 }
 
 .body__info{
