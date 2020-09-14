@@ -16,6 +16,7 @@ function App() {
 
   const [ { user, token } , dispatch] = useDataLayerValue();
 
+
   //run code based on a given condition
   useEffect(() => {
     const hash = getTokenFromUrl();

@@ -1,7 +1,9 @@
-import React from 'react'
+import  React, { useEffect } from 'react'
 import './Footer.css'
 
+
 import PlayCircleOutlineOutlinedIcon from '@material-ui/icons/PlayCircleOutlineOutlined'
+import PauseCircleOutlineOutlinedIcon from '@material-ui/icons/PauseCircleOutlineOutlined'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import ShuffleIcon from '@material-ui/icons/Shuffle'
@@ -9,24 +11,74 @@ import RepeatIcon from '@material-ui/icons/Repeat'
 import { Grid, Slider } from '@material-ui/core'
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlay'
 import VolumeDownIcon from '@material-ui/icons/VolumeDown'
+import { useDataLayerValue } from '../DataLayer'
 
 
-function Footer() {
+function Footer({spotify}) {
+
+    const [{ token, item, playing }, dispatch ] = useDataLayerValue();
+
+    useEffect(() => {
+        spotify.getMyCurrentPlaybackState().then((response) => {
+            console.log (response)
+
+            dispatch({
+                type:'SET_PLAYING',
+                playing: response.is_playing,
+            });
+            dispatch({
+                type:'SET_ITEM',
+                item: response.item,
+            });
+        })
+    }, [spotify]);
+
+    const handlePlayPause = () =>{
+        if(playing){
+            spotify.pause();
+            dispatch({
+                type: 'SET_PLAYING',
+                playing: false,
+            });
+        } else {
+            spotify.play();
+            dispatch({
+                type: 'SET_PLAYING',
+                playing: true,
+            });
+        };
+    }
+
+
     return (
         <div className='footer'>
             <div className='footer__left'>
-                <img className='footer__albumLogo' src='http://4.bp.blogspot.com/-piGq_p7F4Ag/UmftbhnK27I/AAAAAAAAAGY/p7MVvwhgaig/s1600/Other+Things.jpg' alt='' />
-                <div className='footer__songInfo'>
-                    <h4>Song Title!</h4>
-                    <p>Artist</p>
-                </div>
+                <img 
+                    className='footer__albumLogo' 
+                    src={item?.album.images[0].url}
+                     alt={item?.name} />
+                    {item? (
+                        <div className='footer__songInfo'>
+                            <h4>{item.name}</h4>
+                            <p>{item.artist.map((artist) => artist.name).join(', ')}</p>
+                        </div> ) : (
+                        <div className='footer__songInfo'>
+                            <h4> No Song is Playing</h4>
+                            <p>...</p>
+                    </div>
+                )}
 
             </div>
 
             <div className='footer__center'>
                 <ShuffleIcon className="footer__green" />
                 <SkipPreviousIcon className='footer__icon' />
-                <PlayCircleOutlineOutlinedIcon fontSize='large' className='footer__icon' />
+                {playing? (
+                    <PauseCircleOutlineOutlinedIcon onclick={handlePlayPause} 
+                    fontSize='large' className='footer__icon' />
+                    ):(<PlayCircleOutlineOutlinedIcon onclick={handlePlayPause}
+                    fontSize='large' className='footer__icon' />)
+                }
                 <SkipNextIcon className='footer__icon' />
                 <RepeatIcon className='footer__green' />
 
