@@ -74,9 +74,9 @@ function Footer({spotify}) {
                 <ShuffleIcon className="footer__green" />
                 <SkipPreviousIcon className='footer__icon' />
                 {playing? (
-                    <PauseCircleOutlineOutlinedIcon onclick={handlePlayPause} 
+                    <PauseCircleOutlineOutlinedIcon onClick={handlePlayPause} 
                     fontSize='large' className='footer__icon' />
-                    ):(<PlayCircleOutlineOutlinedIcon onclick={handlePlayPause}
+                    ):(<PlayCircleOutlineOutlinedIcon onClick={handlePlayPause}
                     fontSize='large' className='footer__icon' />)
                 }
                 <SkipNextIcon className='footer__icon' />

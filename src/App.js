@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './App.css'; 
 import Login from './components/Login'
 import { getTokenFromUrl } from './spotify';
-//import spotifyWebApi from 'spotify-web-api-js';
 import SpotifyWebApi from 'spotify-web-api-js';
 import Player from './components/Player'
 import { useDataLayerValue } from './DataLayer'
@@ -24,18 +23,27 @@ function App() {
     const _token = hash.access_token;
 
     if(_token){
+      spotify.setAccessToken(_token);
 
       dispatch({
         type: 'SET_TOKEN',
         token: _token,
-      })
-      //setToken(_token)
+      });
 
-      spotify.setAccessToken(_token);
+      spotify.getMyTopArtists().then((response) => {
+        dispatch({
+          type: 'SET_TOP_ARTISTS',
+          top_artists: response,
+        })
+      })
+
+      dispatch({
+        type: 'SET_SPOTIFY',
+        spotify: spotify,
+      })
 
       spotify.getMe().then((user) => {
 
-       
         dispatch({
           type: "SET_USER",
           user: user,
@@ -61,6 +69,7 @@ function App() {
   return (
     <div className="app">
       {
+
         token? (
           <Player spotify={spotify}/>
         ) : (      

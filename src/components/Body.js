@@ -11,10 +11,42 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 function Body({ spotify }) {
     const [{ discover_weekly}, dispatch] =useDataLayerValue();
 
+    // const Player = ({ 
+    //     spotify_uri, 
+    //     playerInstance: {
+    //         _options: {
+    //             getOAuthToken,
+    //             id
+    //         }
+    //     }
+    // }) => {
+    //     getOAuthToken(access_token => {
+    //         fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+    //             method: 'PUT',
+    //             body: JSON.stringify({ uris: [spotify_uri]
+    //             }),
+    //             Headers: {
+    //                 'Content-Type': 'application/json' ,
+    //                 'Authorization': `Bearer ${access_token}`
+    //             },
+    //         });
+    //     });
+    // };
+
+    // player ({playerInstance: new SpotifyWebApi.Player({ 
+    //     name: `spotify:track:${id.name}`
+    // }),
+    //     spotify_uri: `spotify:track:${id}`
+    // });
+
+    // }
     const playPlaylist = (id) => {
+    
         spotify.play({ context_uri: `spotify:playlist:37i9dQZEVXcRG44erWZeyF`})
         .then ((res) => {
             spotify.getMyCurrentPlayingTrack().then((r) => {
+
+                console.log (res);
                 dispatch ({
                     type: 'SET_ITEM',
                     item: r.item,
@@ -25,16 +57,18 @@ function Body({ spotify }) {
                 });
             });
         });
-    };
+    }
 
     const playSong = (id) => {
         spotify.play({
-            uris: [`spotify:track:${id}`],
+            uris: [`spotify:track:${id}`]
         }).then((res) => {
-            spotify.getMyCurrentPlayingTrack().then((r) =>{
+
+            console.log(res);
+            spotify.getMyCurrentPlayingTrack().then((res) =>{
                 dispatch({
                     type:'SET_ITEM',
-                    item: r.item,
+                    item: res.item,
                 });
                 dispatch({
                     type:'SET_PLAYING',
@@ -59,18 +93,18 @@ function Body({ spotify }) {
 
             <div className='body__songs' >
                 <div className='body__icons'>
-                    <PlayCircleFilledIcon className='body__shuffle' />
+                <PlayCircleFilledIcon onClick={playPlaylist} className='body__shuffle' />
                     <FavoriteIcon fontSize='large'/>
                     <MoreHorizIcon />
                 </div>
                 {discover_weekly?.tracks.items.map(item =>(
-                    <SongRow playSong={playSong} track ={item.track}/>
+                    <SongRow playSong={playSong} track={item.track}/>
                 ))}
                 
             </div>
 
         </div>
     )
-}
+};
 
 export default Body
